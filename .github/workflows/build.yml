@@ -23,6 +23,9 @@ jobs:
         id: meta
         uses: docker/metadata-action@v4
         with:
+          # list of Docker images to use as base name for tags
+          images: |
+            ${{ secrets.DOCKERHUB_USERNAME }}/piktochart/app
           # generate Docker tags based on the following events/attributes
           tags: |
             type=ref,event=branch
@@ -39,4 +42,4 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/piktochart/app:${{ steps.meta.outputs.tags }}
+          tags: ${{ steps.meta.outputs.tags }}
