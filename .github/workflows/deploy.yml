@@ -1,0 +1,41 @@
+name: Deploy rail-app to kubernetes environment
+run-name: ${{ github.actor }} is deploying the wecom-app
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "The version you want to deploy"
+        required: true
+
+jobs:
+  apply:
+    defaults:
+      run:
+        working-directory: ansible/
+    steps:
+      - uses: actions/checkout@v3
+     # - uses: wiredcraft/github-actions/ansible/setup@master
+
+      - name: setup kubectl
+        uses: azure/setup-kubectl@v3
+
+      - name: Kubernetes set context
+        uses: Azure/k8s-set-context@v1
+        with:
+          method: kubeconfig
+          kubeconfig: ${{ secrets.KUBECONFIG_NON_PROD }}
+
+      - name: Render configs
+        env:
+          ANSIBLE_STDOUT_CALLBACK: yaml
+          PY_COLORS: '1'
+          ANSIBLE_FORCE_COLOR: '1'
+        run: |
+          ansible-playbook render.yaml  \
+            -e version=${{ inputs.version }}
+
+      - uses: Azure/k8s-deploy@v4
+        with:
+          namespace: demo
+          manifests: |
+            ansible/deploy-rendered.yml
