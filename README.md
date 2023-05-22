@@ -22,3 +22,4 @@ Discuss how you would deploy the app on production using Kubernetes. Some topics
 
 Some of the topics suggested cannot be easily explained in a short report. Where suitable, a high level summary will suffice and may be discussed further during the interview.
 
+

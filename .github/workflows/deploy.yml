@@ -1,5 +1,5 @@
-name: Deploy rail-app to kubernetes environment
-run-name: ${{ github.actor }} is deploying the wecom-app
+name: Deploy rail-app to kubernetes 
+run-name: ${{ github.actor }} is deploying the app
 on:
   workflow_dispatch:
     inputs:
@@ -24,6 +24,9 @@ jobs:
         with:
           method: kubeconfig
           kubeconfig: ${{ secrets.KUBECONFIG_NON_PROD }}
+
+      # - name: setup ansible environment
+      #   uses: ansible/setup
 
       - name: Render configs
         env:
